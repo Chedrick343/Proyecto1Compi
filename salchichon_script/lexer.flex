@@ -8,7 +8,7 @@ import java_cup.runtime.Symbol;
 
 
 %cup                // Integracion de cup
-%class scanner      // Nombre de la clase generada
+%class Lexer      // Nombre de la clase generada
 %public
 %unicode            // UTF-8
 %line               // Guarda el numero de linea
