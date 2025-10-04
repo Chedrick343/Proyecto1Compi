@@ -1,0 +1,45 @@
+package salchichon_script;
+
+import java_cup.runtime.Symbol;
+
+// PARSER
+parser code
+{:
+    // Codigo visible
+
+    // Errores recuperables
+    public void syntax_error(Symbol s){
+        System.out.println("Error R de sintaxis: "+ s.value +" Línea "+(s.left+1)+" Columna "+(s.right+1) );
+    }
+
+    // Error no recuperable
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception { 
+        System.out.println("Error NR de sintaxis: " + s.value + " Línea " + (s.left+1) + " Columna " + (s.right+1));
+    }
+:}
+
+action code
+{:
+    //Codigo de usuario - fase de analisis
+    String tmp="";
+:}
+
+// TERMINALES Y NO TERMINALES
+
+terminal String INT1, CHAR1, STR1, FLOAT1, BOOL1;
+terminal String LET, PAR_A, PAR_C, BLO_A, BLO_C, COMA, FIN_E, ASIGN;
+terminal String ID, ENTERO, CADENA;
+non terminal program, funcion, sentencia, main, declaracion, bloque, expresion, termino, factor;
+
+// PRECENDENCIA
+
+//precedence left MAS, MENOS;
+//precedence left POR, DIV; 
+
+// PRODUCCIONES
+start with program;
+
+program ::= main;
+
+main ::= LET ID ASIGN ENTERO;
+
