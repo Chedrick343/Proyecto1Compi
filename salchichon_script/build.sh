@@ -16,5 +16,5 @@ javac -cp "$JFLEX_JAR:$CUP_JAR:." *.java
 echo "✅ Compilación completa"
 
 # Ejecutar (opcional)
-java -cp "$JFLEX_JAR:$CUP_JAR:." Main
+#java -cp "$JFLEX_JAR:$CUP_JAR:." Main
 

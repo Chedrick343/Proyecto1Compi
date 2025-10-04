@@ -1,7 +1,5 @@
 package salchichon_script;
 
-import jflex.anttask.JFlexTask;
-
 /**
  * 
  * @author Eyden
