@@ -14,7 +14,7 @@ public class Main {
         try {
             String ruta = "salchichon_script/";
             String opcFlex[] = { ruta + "lexer.flex", "-d", ruta };
-            //jflex.Main.generate(opcFlex);
+            jflex.Main.generate(opcFlex);
             String opcCUP[] = { "-destdir", ruta, "-parser", "Parser", ruta + "parser.cup" };
             java_cup.Main.main(opcCUP);
         } catch (Exception e) {
@@ -27,9 +27,8 @@ public class Main {
             Lexer scan = new Lexer(new FileReader(archivo));
             Symbol s;
             
-            // CORREGIR: Usar Sym (con mayúscula) que es la clase generada
-            while ((s = scan.next_token()).sym != Sym.EOF) {
-                System.out.println("Token: " + Sym.terminalNames[s.sym] + " → " + s.value);
+            while ((s = scan.next_token()).sym != sym.EOF) {
+                System.out.println("Token: " + sym.terminalNames[s.sym] + " → " + s.value);
             }
             scan.closeWriter();
             
