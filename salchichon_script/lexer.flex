@@ -1,21 +1,45 @@
 package salchichon_script;
 
 import java_cup.runtime.Symbol;
+    import java.io.PrintWriter;
+    import java.io.FileWriter;
+    import java.io.IOException;
+    import java.util.HashMap;
 
-
-// cambio de sección 
 %%
 
 
-%cup                // Integracion de cup
-%class Lexer      // Nombre de la clase generada
+%cup
+%class Lexer
 %public
-%unicode            // UTF-8
-%line               // Guarda el numero de linea
-%column             // Guarda la columna
-%state CADENA          
+%unicode
+%line
+%column
+%state CADENA
 
-%{
+%{  
+
+
+    HashMap<String, String> tablaVariables = new HashMap<>();
+    HashMap<String, String> tablaIdentificadores = new HashMap<>();
+    HashMap<String, String> tablaConstantes = new HashMap<>();
+    HashMap<String, String> tablaPalabrasReservadas = new HashMap<>();
+
+    PrintWriter tokenWriter;
+
+    public Lexer(java.io.Reader in) {
+        this.yyreset(in);
+        try {
+            tokenWriter = new PrintWriter(new FileWriter("tokens.txt"));
+        } catch (IOException e) {
+            System.err.println("Error al abrir archivo tokens.txt");
+        }
+    }
+
+    public void closeWriter() {
+        if (tokenWriter != null) tokenWriter.close();
+    }
+
     String cadena = "";
 
     private Symbol symbol(int type) {
@@ -26,8 +50,6 @@ import java_cup.runtime.Symbol;
         return new Symbol(type, yyline, yycolumn, value);
     }
 %}
-
-
 // Lexemas - simbolos
 PAR_A   =   "є"
 PAR_C   =   "э"
@@ -63,47 +85,158 @@ COMENTARIO = {COM_S} | {COM_C}
 
 %%
 
-<YYINITIAL> {INT1}      { return new Symbol(sym.INT1, yyline, yycolumn,"entero"); }
-<YYINITIAL> {CHAR1}     { return new Symbol(sym.CHAR1, yyline, yycolumn,"caracter"); }
-<YYINITIAL> {STR1}      { return new Symbol(sym.STR1, yyline, yycolumn,"string"); }
-<YYINITIAL> {FLOAT1}    { return new Symbol(sym.FLOAT1, yyline, yycolumn,"privado"); }
-<YYINITIAL> {BOOL1}     { return new Symbol(sym.BOOL1, yyline, yycolumn,"booleano"); }
-<YYINITIAL> {LET}       { return new Symbol(sym.LET, yyline, yycolumn,yytext()); }
+<YYINITIAL> {INT1}      { 
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "TipoEntero");
+                            }
+                            tokenWriter.println("Token: INT1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            return new Symbol(Sym.INT1, yyline, yycolumn,"entero"); }
 
 
-<YYINITIAL> {PAR_A}     { return new Symbol(sym.PAR_A, yyline, yycolumn,yytext()); }
-<YYINITIAL> {PAR_C}     { return new Symbol(sym.PAR_C, yyline, yycolumn,yytext()); }
-<YYINITIAL> {BLO_A}     { return new Symbol(sym.BLO_A, yyline, yycolumn,yytext()); }
-<YYINITIAL> {BLO_C}     { return new Symbol(sym.BLO_C, yyline, yycolumn,yytext()); }
-<YYINITIAL> {COMA}      { return new Symbol(sym.COMA, yyline, yycolumn,yytext()); }
-<YYINITIAL> {FIN_E}     { return new Symbol(sym.FIN_E, yyline, yycolumn,yytext()); }
-<YYINITIAL> {ASIGN}     { return new Symbol(sym.ASIGN, yyline, yycolumn,yytext()); }
+<YYINITIAL> {CHAR1}     { 
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "TipoChar");
+                            }
+                            tokenWriter.println("Token: CHAR1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            return new Symbol(Sym.CHAR1, yyline, yycolumn,"caracter"); }
 
 
-<YYINITIAL> {ENTERO}    { return new Symbol(sym.ENTERO, yyline, yycolumn,yytext()); }
+<YYINITIAL> {STR1}      { 
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "TipoString");
+                            }
+                            tokenWriter.println("Token: STR1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            
+                            return new Symbol(Sym.STR1, yyline, yycolumn,"string"); }
 
 
-// ID VA DESPUES DE LAS PALABRAS RESERVADAS PARA QUE NO LAS AGARRE COMO ID
-<YYINITIAL> {ID}        { return new Symbol(sym.ID, yyline, yycolumn,yytext()); }
+<YYINITIAL> {FLOAT1}    { 
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "TipoFloat");
+                            }
+                            tokenWriter.println("Token: FLOAT1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            
+                            return new Symbol(Sym.FLOAT1, yyline, yycolumn,"privado"); }
 
+<YYINITIAL> {BOOL1}     { 
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "TipoBool");
+                            }
+                            tokenWriter.println("Token: BOOL1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            
+                            return new Symbol(Sym.BOOL1, yyline, yycolumn,"booleano"); }
+<YYINITIAL> {LET}       { 
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "PalabraReservadaLet");
+                            }
+                            tokenWriter.println("Token: LET\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            return new Symbol(Sym.LET, yyline, yycolumn,yytext()); }
+
+
+<YYINITIAL> {PAR_A}     { 
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "abreParentesis");
+                            }
+                            tokenWriter.println("Token: PAR_A\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+
+                            return new Symbol(Sym.PAR_A, yyline, yycolumn,yytext()); }
+
+
+<YYINITIAL> {PAR_C}     { 
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "cierraParentesis");
+                            }
+                            tokenWriter.println("Token: PAR_C\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+    
+                            return new Symbol(Sym.PAR_C, yyline, yycolumn,yytext()); }
+
+
+<YYINITIAL> {BLO_A}     { 
+    
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "abreBloque");
+                            }
+                            tokenWriter.println("Token: BLO_A\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            return new Symbol(Sym.BLO_A, yyline, yycolumn,yytext()); }
+
+
+<YYINITIAL> {BLO_C}     {   
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "cierraBloque");
+                            }
+                            tokenWriter.println("Token: BLO_C\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+    
+                            return new Symbol(Sym.BLO_C, yyline, yycolumn,yytext()); }
+
+<YYINITIAL> {COMA}      { 
+
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "coma");
+                            }
+                            tokenWriter.println("Token: COMA\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+    
+                            return new Symbol(Sym.COMA, yyline, yycolumn,yytext()); }
+<YYINITIAL> {FIN_E}     { 
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "finalExpresion");
+                            }
+                            tokenWriter.println("Token: CHAR1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            return new Symbol(Sym.FIN_E, yyline, yycolumn,yytext()); }
+<YYINITIAL> {ASIGN}     { 
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "asignacion");
+                            }
+                            tokenWriter.println("Token: ASIGN\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+    
+                            return new Symbol(Sym.ASIGN, yyline, yycolumn,yytext()); }
+
+<YYINITIAL> {ENTERO}    { 
+    
+                            if(!tablaConstantes.containsKey(yytext())){
+                                tablaConstantes.put(yytext(), "constante");
+                            }
+                            tokenWriter.println("Token: ENTERO\tLexema: " + yytext() + "\tTabla: tablaConstantes");
+                            return new Symbol(Sym.ENTERO, yyline, yycolumn,yytext()); }
+
+
+<YYINITIAL> {ID}        { 
+    
+                            if(!tablaIdentificadores.containsKey(yytext())){
+                                tablaIdentificadores.put(yytext(), "identificador");
+                                tokenWriter.println("Token: ID\tLexema: " + yytext() + "\tTabla: tablaIdentificadores");
+                                return new Symbol(Sym.ID, yyline, yycolumn,yytext());
+                            }else{
+                                System.out.println("El identificador: "+yytext()+". Ya existe en el programa");
+                            }
+                            }
 
 <YYINITIAL> [\"]        { yybegin(CADENA); cadena = ""; }
-<YYINITIAL> {SPACE}     { /*Espacios en blanco, ignorados*/ }
-<YYINITIAL> {ENTER}     { /*Saltos de linea, ignorados*/ }
-<YYINITIAL> {COMENTARIO} { /* ignorar comentarios */ }
+<YYINITIAL> {SPACE}     { /* ignorar */ }
+<YYINITIAL> {ENTER}     { /* ignorar */ }
+<YYINITIAL> {COMENTARIO} { /* ignorar */ }
 
-
-// TODO LO QUE NO RECONOZCA LO MANDA AQUI
 <YYINITIAL> . {
         String errLex = "Error léxico : '"+yytext()+"' en la línea: "+(yyline+1)+" y columna: "+(yycolumn+1);
         System.out.println(errLex);
 }
 
 <CADENA> {
-        [\"] { String tmp=cadena+"\""; cadena=""; yybegin(YYINITIAL);  return new Symbol(sym.CADENA,yyline, yycolumn, tmp); }
-        [\n] {String tmp=cadena; cadena="";  
-                System.out.println("Se esperaba cierre de cadena (\")."); 
-                yybegin(YYINITIAL);
+        [\"] { 
+            String tmp = cadena + "\""; 
+            cadena = ""; 
+            yybegin(YYINITIAL);
+              
+            if(!tablaConstantes.containsKey(yytext())){
+                tablaConstantes.put(yytext(), "constante");
             }
-        [^\"] { cadena+=yytext();}
+            tokenWriter.println("Token: CADENA\tLexema: " + yytext() + "\tTabla: tablaConstantes");
+            return new Symbol(Sym.CADENA, yyline, yycolumn, tmp); 
+        }
+        [\n] {
+            String tmp = cadena; 
+            cadena = "";  
+            System.out.println("Se esperaba cierre de cadena (\")."); 
+            yybegin(YYINITIAL);
+        }
+        [^\"] { cadena += yytext(); }
 }
