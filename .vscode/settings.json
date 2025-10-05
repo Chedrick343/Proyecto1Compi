@@ -1,7 +1,7 @@
 {
   "java.project.referencedLibraries": [
-    "salchichon_script/libs/jflex-full-1.9.1.jar",
-    "salchichon_script/libs/java-cup-11b.jar",
-    "salchichon_script/libs/java-cup-11b-runtime.jar"
+    "libs/jflex-full-1.9.1.jar",
+    "libs/java-cup-11b.jar",
+    "libs/java-cup-11b-runtime.jar"
   ]
 }
