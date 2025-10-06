@@ -1,6 +1,6 @@
 | Programa de prueba para Salchichón Script
 | Prueba de declaraciones, main y expresiones básicas
 void main ¿
-    let float valor = 3$
+    let float valor = -3$
     let boolean activo = true$
 ?$

@@ -2,12 +2,16 @@ package salchichon_script;
 
 import java_cup.runtime.Symbol;
 
+// PARSER
 parser code
 {:
+
+    // Errores recuperables
     public void syntax_error(Symbol s){
         System.out.println("Error R de sintaxis: "+ s.value +" Línea "+(s.left+1)+" Columna "+(s.right+1) );
     }
 
+    // Errores no recuperables
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception { 
         System.out.println("Error NR de sintaxis: " + s.value + " Línea " + (s.left+1) + " Columna " + (s.right+1));
     }
@@ -15,21 +19,32 @@ parser code
 
 action code
 {:
+    // Codigo de usuario - fase de analisis
     String tmp="";
 :}
 
 // TERMINALES
-terminal String INT1, CHAR1, STR1, FLOAT1, BOOL1, VOID;
-terminal String LET, PAR_A, PAR_C, BLO_A, BLO_C, COMA, FIN_E, ASIGN;
-terminal String ID, ENTERO, CADENA;
+terminal PAR_A, PAR_C, BLO_A, BLO_C, COMA, FLECHA, FIN_E, ASIGN;
+terminal MAS, MENOS, POR, DIV, DIV_ENT, MOD, POT;
+terminal AND, OR, NOT;
+terminal INC, DEC;
+terminal MAYOR, MENOR, MAY_IGU, MEN_IGU, IGUAL, DIF;
+terminal INT1, CHAR1, STR1, FLOAT1, BOOL1, LET, VOID, TRUE1, FALSE1, DECIDE;
+terminal OF, ELSE, END, LOOP, EXIT, WHEN, FOR1, STEP, TO, DOWNTO, DO;
+terminal RETURN, BREAK;
+terminal OUTPUT, INPUT;
 
-// NO TERMINALES - CORREGIR: program en lugar de program
+terminal ENTERO, DECIMALES, FLOTANTE, CHAR, ID, SPACE, ENTER, FIN_L, INPUT1, COM_S, COM_C, COMENTARIO;
+terminal CADENA;
+
+// NO TERMINALES
 non terminal Object program;
 non terminal main, bloque, lista_sentencias, sentencia, creacion, tipo, expresion, asignacion_opt;
 
 // PRECEDENCIA
-//precedence left MAS, MENOS;
-//precedence left POR, DIV; 
+precedence left MAS, MENOS;
+precedence left POR, DIV;
+precedence left DIV_ENT, MOD;
 
 // PRODUCCIONES
 start with program;
@@ -62,4 +77,5 @@ asignacion_opt ::= ASIGN expresion | /* vacío */ ;
 
 tipo ::= INT1 | FLOAT1 | STR1 | BOOL1 | CHAR1 ;
 
-expresion ::= ID | ENTERO | CADENA ;
+expresion ::= ID | ENTERO | CADENA | FLOTANTE | TRUE1 | FALSE1;
+
