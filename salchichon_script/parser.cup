@@ -47,6 +47,48 @@ precedence left POR, DIV;
 precedence left DIV_ENT, MOD;
 
 // PRODUCCIONES
+
+/*
+AQUI EMPEZAREMOS A PONER NUESTRAS PRODUCCIONES, LAS HARÉ COMENTADAS POR AHORA
+
+//+++++++++++++++++++++BLOQUE++++++++++++++++++++++++++++++++++
+
+bloque ::= BLO_A listaSentencias_opt BLO_C;
+
+listaSentencias_opt ::= /* vacío */
+                     | listaSentencias
+                     ;
+
+listaSentencias ::= sentencia
+                  | listaSentencias sentencia
+                  ;
+sentencia ::= declaracion FIN_E
+            | asignacion FIN_E
+            | llamadaFuncion FIN_E
+            | imprimir FIN_E
+            | leer FIN_E
+            | RETURN expresion FIN_E
+            | BREAK FIN_E
+            ;
+
+tipo ::= INT1 | CHAR1 | STR1 | FLOAT1 | BOOL1;
+//+++++++++++++++++++++FUNCIONES++++++++++++++++++++++++++++++++
+
+funcion ::= tipo ID PAR_A parametros_opt PAR_C bloque;
+
+parametros_opt ::= /* vacío */
+                 | listaParametros
+                 ;
+
+listaParametros ::= parametro //LISTA DE PARAMETROS ES UN PARAMETRO O LISTA DE PARAMETROS SEGUIDO DE UNA COMA Y UN PARAMETRO
+                  | listaParametros COMA parametro
+                  ;
+
+parametro ::= tipo ID; //UN PARAMETRO ES UN TIPO SEGUIDO DE UN ID
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+
+
 start with program;
 
 
