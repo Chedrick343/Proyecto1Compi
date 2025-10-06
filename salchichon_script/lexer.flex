@@ -111,6 +111,8 @@ RETURN      =   "return"
 BREAK       =   "break"
 OUTPUT      =   "output"
 INPUT       =   "input"
+IMPRIMIR    =   "print"
+LEER        =   "read"
 
 // funcion principal
 MAIN        =   "principal"
@@ -622,6 +624,22 @@ COMENTARIO = {COM_S} | {COM_C}
                             tokenWriter.println("Token: IGUAL\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
                             return new Symbol(sym.IGUAL, yyline, yycolumn,yytext()); }
 
+
+<YYINITIAL> {IMPRIMIR} {
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "PalabraReservadaPrint");
+                            }
+                            tokenWriter.println("Token: IMPRIMIR\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            return new Symbol(sym.IMPRIMIR, yyline, yycolumn, yytext()); }
+
+
+<YYINITIAL> {LEER} {
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "PalabraReservadaRead");
+                            }
+                            tokenWriter.println("Token: LEER\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            return new Symbol(sym.LEER, yyline, yycolumn, yytext()); }
+                            
 
 <YYINITIAL> {MAIN} {
                             if(!tablaPalabrasReservadas.containsKey(yytext())){
