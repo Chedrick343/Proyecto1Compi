@@ -25,3 +25,4 @@ bin/
 *.swp
 *.bak
 *.log
+tokens.txt
