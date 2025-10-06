@@ -47,6 +47,7 @@ non terminal asignacion, asignacion_dec;
 non terminal expresion;
 non terminal expresion_arit, termino, factor, potencia, operando, elem_arr;
 non terminal op_rel, incrementar, decrementar;
+non terminal condicional, lista_casos, caso, cond_else_opt;
 
 // PRECEDENCIA
 precedence left OR;
@@ -111,6 +112,7 @@ sentencia ::= declaracion FIN_E
     | BREAK FIN_E
     | incrementar FIN_E
     | decrementar FIN_E
+    | condicional FIN_E
     ;
 
 incrementar ::= ID INC;
@@ -207,6 +209,21 @@ op_rel ::= MAYOR
     ;
 
 // ESTRUCTURAS DE CONTROL
+
+condicional ::= DECIDE OF lista_casos cond_else_opt END DECIDE;
+
+lista_casos ::= caso
+              | caso lista_casos
+              ;
+
+caso ::= PAR_A expresion PAR_C FLECHA bloque;
+
+cond_else_opt ::= /* vacío */
+                 | ELSE FLECHA bloque
+                 ;
+
+
+
 
 
 

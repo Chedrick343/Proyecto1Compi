@@ -18,4 +18,8 @@ init void principal єэ ¿ ?$
 
 void funcion2 єint identificadorэ¿
     suma = numero + identificador++$
+    decide of є3 < 5э -> ¿
+        suma2 = 4$
+    ?
+    end decide$
 ?$
