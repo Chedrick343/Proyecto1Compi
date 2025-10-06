@@ -5,10 +5,10 @@ let String y = "hola" $
 let boolean prueba$
 let float yolo = 0.0001$
 
-x = 30$
+x1 = 30$
 
 printє"hola"э$
-xєэ$
+x2єэ$
 
 int mifunc єэ ¿ 
     return 3$
@@ -16,4 +16,6 @@ int mifunc єэ ¿
 
 init void principal єэ ¿ ?$
 
-void funcion2 єэ¿?$
+void funcion2 єint identificadorэ¿
+    identificador++$
+?$

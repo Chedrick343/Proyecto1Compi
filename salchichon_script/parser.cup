@@ -46,7 +46,7 @@ non terminal funcion, parametros_opt, lista_parametros, parametro;
 non terminal asignacion, asignacion_dec;
 non terminal expresion;
 non terminal expresion_arit, termino, factor, potencia, operando, elem_arr;
-non terminal op_rel;
+non terminal op_rel, incrementar, decrementar;
 
 // PRECEDENCIA
 precedence left OR;
@@ -109,7 +109,12 @@ sentencia ::= declaracion FIN_E
     | leer FIN_E
     | RETURN expr_opc FIN_E
     | BREAK FIN_E
+    | incrementar FIN_E
+    | decrementar FIN_E
     ;
+
+incrementar ::= ID INC;
+decrementar ::= ID DEC;
 
 expr_opc ::=
       expresion
