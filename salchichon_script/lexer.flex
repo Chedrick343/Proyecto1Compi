@@ -27,7 +27,8 @@ import java_cup.runtime.Symbol;
 
     PrintWriter tokenWriter;
 
-    {
+    public Lexer(java.io.Reader in) {
+        this.yyreset(in);
         try {
             tokenWriter = new PrintWriter(new FileWriter("tokens.txt"));
         } catch (IOException e) {
@@ -89,7 +90,7 @@ COMENTARIO = {COM_S} | {COM_C}
                                 tablaPalabrasReservadas.put(yytext(), "TipoEntero");
                             }
                             tokenWriter.println("Token: INT1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
-                            return new Symbol(sym.INT1, yyline, yycolumn,"entero"); }
+                            return new Symbol(Sym.INT1, yyline, yycolumn,"entero"); }
 
 
 <YYINITIAL> {CHAR1}     { 
@@ -97,7 +98,7 @@ COMENTARIO = {COM_S} | {COM_C}
                                 tablaPalabrasReservadas.put(yytext(), "TipoChar");
                             }
                             tokenWriter.println("Token: CHAR1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
-                            return new Symbol(sym.CHAR1, yyline, yycolumn,"caracter"); }
+                            return new Symbol(Sym.CHAR1, yyline, yycolumn,"caracter"); }
 
 
 <YYINITIAL> {STR1}      { 
@@ -106,7 +107,7 @@ COMENTARIO = {COM_S} | {COM_C}
                             }
                             tokenWriter.println("Token: STR1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
                             
-                            return new Symbol(sym.STR1, yyline, yycolumn,"string"); }
+                            return new Symbol(Sym.STR1, yyline, yycolumn,"string"); }
 
 
 <YYINITIAL> {FLOAT1}    { 
@@ -115,7 +116,7 @@ COMENTARIO = {COM_S} | {COM_C}
                             }
                             tokenWriter.println("Token: FLOAT1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
                             
-                            return new Symbol(sym.FLOAT1, yyline, yycolumn,"privado"); }
+                            return new Symbol(Sym.FLOAT1, yyline, yycolumn,"privado"); }
 
 <YYINITIAL> {BOOL1}     { 
                             if(!tablaPalabrasReservadas.containsKey(yytext())){
@@ -123,13 +124,13 @@ COMENTARIO = {COM_S} | {COM_C}
                             }
                             tokenWriter.println("Token: BOOL1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
                             
-                            return new Symbol(sym.BOOL1, yyline, yycolumn,"booleano"); }
+                            return new Symbol(Sym.BOOL1, yyline, yycolumn,"booleano"); }
 <YYINITIAL> {LET}       { 
                             if(!tablaPalabrasReservadas.containsKey(yytext())){
                                 tablaPalabrasReservadas.put(yytext(), "PalabraReservadaLet");
                             }
                             tokenWriter.println("Token: LET\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
-                            return new Symbol(sym.LET, yyline, yycolumn,yytext()); }
+                            return new Symbol(Sym.LET, yyline, yycolumn,yytext()); }
 
 
 <YYINITIAL> {PAR_A}     { 
@@ -138,7 +139,7 @@ COMENTARIO = {COM_S} | {COM_C}
                             }
                             tokenWriter.println("Token: PAR_A\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
 
-                            return new Symbol(sym.PAR_A, yyline, yycolumn,yytext()); }
+                            return new Symbol(Sym.PAR_A, yyline, yycolumn,yytext()); }
 
 
 <YYINITIAL> {PAR_C}     { 
@@ -147,7 +148,7 @@ COMENTARIO = {COM_S} | {COM_C}
                             }
                             tokenWriter.println("Token: PAR_C\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
     
-                            return new Symbol(sym.PAR_C, yyline, yycolumn,yytext()); }
+                            return new Symbol(Sym.PAR_C, yyline, yycolumn,yytext()); }
 
 
 <YYINITIAL> {BLO_A}     { 
@@ -156,7 +157,7 @@ COMENTARIO = {COM_S} | {COM_C}
                                 tablaPalabrasReservadas.put(yytext(), "abreBloque");
                             }
                             tokenWriter.println("Token: BLO_A\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
-                            return new Symbol(sym.BLO_A, yyline, yycolumn,yytext()); }
+                            return new Symbol(Sym.BLO_A, yyline, yycolumn,yytext()); }
 
 
 <YYINITIAL> {BLO_C}     {   
@@ -165,7 +166,7 @@ COMENTARIO = {COM_S} | {COM_C}
                             }
                             tokenWriter.println("Token: BLO_C\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
     
-                            return new Symbol(sym.BLO_C, yyline, yycolumn,yytext()); }
+                            return new Symbol(Sym.BLO_C, yyline, yycolumn,yytext()); }
 
 <YYINITIAL> {COMA}      { 
 
@@ -174,20 +175,20 @@ COMENTARIO = {COM_S} | {COM_C}
                             }
                             tokenWriter.println("Token: COMA\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
     
-                            return new Symbol(sym.COMA, yyline, yycolumn,yytext()); }
+                            return new Symbol(Sym.COMA, yyline, yycolumn,yytext()); }
 <YYINITIAL> {FIN_E}     { 
                             if(!tablaPalabrasReservadas.containsKey(yytext())){
                                 tablaPalabrasReservadas.put(yytext(), "finalExpresion");
                             }
                             tokenWriter.println("Token: CHAR1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
-                            return new Symbol(sym.FIN_E, yyline, yycolumn,yytext()); }
+                            return new Symbol(Sym.FIN_E, yyline, yycolumn,yytext()); }
 <YYINITIAL> {ASIGN}     { 
                             if(!tablaPalabrasReservadas.containsKey(yytext())){
                                 tablaPalabrasReservadas.put(yytext(), "asignacion");
                             }
                             tokenWriter.println("Token: ASIGN\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
     
-                            return new Symbol(sym.ASIGN, yyline, yycolumn,yytext()); }
+                            return new Symbol(Sym.ASIGN, yyline, yycolumn,yytext()); }
 
 <YYINITIAL> {ENTERO}    { 
     
@@ -195,7 +196,7 @@ COMENTARIO = {COM_S} | {COM_C}
                                 tablaConstantes.put(yytext(), "constante");
                             }
                             tokenWriter.println("Token: ENTERO\tLexema: " + yytext() + "\tTabla: tablaConstantes");
-                            return new Symbol(sym.ENTERO, yyline, yycolumn,yytext()); }
+                            return new Symbol(Sym.ENTERO, yyline, yycolumn,yytext()); }
 
 
 <YYINITIAL> {ID}        { 
@@ -203,7 +204,7 @@ COMENTARIO = {COM_S} | {COM_C}
                             if(!tablaIdentificadores.containsKey(yytext())){
                                 tablaIdentificadores.put(yytext(), "identificador");
                                 tokenWriter.println("Token: ID\tLexema: " + yytext() + "\tTabla: tablaIdentificadores");
-                                return new Symbol(sym.ID, yyline, yycolumn,yytext());
+                                return new Symbol(Sym.ID, yyline, yycolumn,yytext());
                             }else{
                                 System.out.println("El identificador: "+yytext()+". Ya existe en el programa");
                             }
@@ -229,12 +230,12 @@ COMENTARIO = {COM_S} | {COM_C}
                 tablaConstantes.put(yytext(), "constante");
             }
             tokenWriter.println("Token: CADENA\tLexema: " + yytext() + "\tTabla: tablaConstantes");
-            return new Symbol(sym.CADENA, yyline, yycolumn, tmp); 
+            return new Symbol(Sym.CADENA, yyline, yycolumn, tmp); 
         }
         [\n] {
             String tmp = cadena; 
             cadena = "";  
-            System.out.println("Se esperaba cierre de cadena en la linea yyline() (\")."); 
+            System.out.println("Se esperaba cierre de cadena (\")."); 
             yybegin(YYINITIAL);
         }
         [^\"] { cadena += yytext(); }
