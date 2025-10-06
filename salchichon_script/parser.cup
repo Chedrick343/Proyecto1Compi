@@ -35,16 +35,26 @@ terminal RETURN, BREAK;
 terminal OUTPUT, INPUT;
 
 terminal ENTERO, DECIMALES, FLOTANTE, CHAR, ID, SPACE, ENTER, FIN_L, INPUT1, COM_S, COM_C, COMENTARIO;
-terminal CADENA;
+terminal MAIN, CADENA;
 
 // NO TERMINALES
 non terminal Object program;
-non terminal main, bloque, lista_sentencias, sentencia, creacion, tipo, expresion, asignacion_opt;
+non terminal main_function, global_section;
+non terminal tipo, declaracion;
+non terminal asignacion, asignacion_dec;
+non terminal expresion;
+non terminal expresion_arit, termino, factor, potencia, operando, elem_arr, llamada_funcion;
+non terminal op_rel, expresion_rel, expresion_log;
 
 // PRECEDENCIA
+precedence left OR;
+precedence left AND;
+precedence left IGUAL, DIF;
+precedence left MAYOR, MENOR, MAY_IGU, MEN_IGU;
 precedence left MAS, MENOS;
-precedence left POR, DIV;
-precedence left DIV_ENT, MOD;
+precedence left POR, DIV, DIV_ENT, MOD;
+precedence right POT;
+precedence right NOT;
 
 // PRODUCCIONES
 
@@ -92,32 +102,88 @@ parametro ::= tipo ID; //UN PARAMETRO ES UN TIPO SEGUIDO DE UN ID
 start with program;
 
 
-program ::= main
-    {: System.out.println("Programa completo reconocido."); :}
+program ::= global_section main_function global_section
     ;
 
-main ::= VOID ID BLO_A lista_sentencias BLO_C FIN_E
-    {: System.out.println("Main reconocido correctamente."); :}
+main_function ::= VOID MAIN PAR_A PAR_C BLO_A BLO_C FIN_E
     ;
 
-bloque ::= BLO_A lista_sentencias BLO_C
+global_section ::= declaracion global_section
+    | asignacion global_section
+    | // є
     ;
 
-lista_sentencias ::=
-    lista_sentencias sentencia
-    |
-    sentencia
+// ======== DECLARACIÓN DE VARIABLES ========
+tipo ::= INT1
+    | VOID
+    | STR1
+    | FLOAT1
+    | BOOL1
+    | CHAR1
     ;
 
-sentencia ::= creacion FIN_E
+declaracion ::= LET tipo ID asignacion_dec FIN_E
     ;
 
-creacion ::= LET tipo ID asignacion_opt
+// ASIGNACION DE VARIABLES
+asignacion_dec ::= ASIGN expresion
+    | /* ε */
     ;
 
-asignacion_opt ::= ASIGN expresion | /* vacío */ ;
+asignacion ::= ID ASIGN expresion FIN_E
+    ;
 
-tipo ::= INT1 | FLOAT1 | STR1 | BOOL1 | CHAR1 ;
+// EXPRESIONES
+expresion ::= expresion AND expresion
+    | expresion OR expresion
+    | NOT expresion
+    | expresion_arit op_rel expresion_arit
+    | expresion_arit
+    ;
 
-expresion ::= ID | ENTERO | CADENA | FLOTANTE | TRUE1 | FALSE1;
 
+// EXPRESIONES ARITMETICAS
+expresion_arit ::= expresion_arit MAS termino
+    | expresion_arit MENOS termino
+    | termino
+    ;
+
+termino ::= factor POR factor
+    | factor DIV factor
+    | factor DIV_ENT factor
+    | factor MOD factor
+    | factor
+    ;
+
+factor ::= potencia POT potencia
+    | potencia
+    ;
+
+potencia ::= PAR_A expresion PAR_C
+    | operando
+    ;
+
+operando ::= ENTERO
+    | FLOTANTE
+    | TRUE1
+    | FALSE1
+    | CHAR
+    | CADENA
+    | ID 
+    | llamada_funcion
+    | elem_arr
+    | MENOS operando
+    | INC
+    | DEC
+    ;
+
+// OPERADORES RELACIONALES
+op_rel ::= MAYOR
+    | MENOR
+    | MAY_IGU
+    | MEN_IGU
+    | IGUAL
+    | DIF
+    ;
+
+// ESTRUCTURAS DE CONTROL
