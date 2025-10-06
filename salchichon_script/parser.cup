@@ -35,17 +35,18 @@ terminal RETURN, BREAK;
 terminal OUTPUT, INPUT;
 
 terminal ENTERO, DECIMALES, FLOTANTE, CHAR, ID, SPACE, ENTER, FIN_L, INPUT1, COM_S, COM_C, COMENTARIO;
-terminal MAIN, CADENA;
+terminal IMPRIMIR, LEER, MAIN, CADENA;
 
 // NO TERMINALES
-non terminal bloque, lista_sentencias, lista_sentencias_opt, sentencia;
 non terminal Object program;
-non terminal main_function, global_section;
-non terminal tipo, declaracion;
+non terminal main_funcion, elemento_global, lista_global;
+non terminal tipo, tipo_funcion, declaracion;
+non terminal bloque, lista_sentencias, lista_sentencias_opt, sentencia, expr_opc, llamada_funcion, imprimir, leer;
+non terminal funcion, parametros_opt, lista_parametros, parametro;
 non terminal asignacion, asignacion_dec;
 non terminal expresion;
-non terminal expresion_arit, termino, factor, potencia, operando, elem_arr, llamada_funcion;
-non terminal op_rel, expresion_rel, expresion_log;
+non terminal expresion_arit, termino, factor, potencia, operando, elem_arr;
+non terminal op_rel;
 
 // PRECEDENCIA
 precedence left OR;
@@ -59,6 +60,36 @@ precedence right NOT;
 
 // PRODUCCIONES
 
+start with program;
+
+
+program ::= lista_global main_funcion
+    ;
+    
+lista_global ::= elemento_global lista_global
+    | /* vacío */
+    ;
+
+elemento_global ::= sentencia
+    | funcion
+    ;
+
+main_funcion ::= VOID MAIN PAR_A PAR_C bloque FIN_E
+    | VOID MAIN bloque FIN_E
+    ;
+    
+// ======== DECLARACIÓN DE VARIABLES ========
+tipo ::= INT1
+    | STR1
+    | FLOAT1
+    | BOOL1
+    | CHAR1
+    ;
+
+tipo_funcion ::= tipo
+    //| VOID
+    ;
+
 //+++++++++++++++++++++BLOQUE++++++++++++++++++++++++++++++++++
 
 bloque ::= BLO_A lista_sentencias_opt BLO_C;
@@ -71,53 +102,41 @@ lista_sentencias ::= sentencia
                   | lista_sentencias sentencia
                   ;
 sentencia ::= declaracion FIN_E
-            | asignacion FIN_E
-            | llamada_funcion FIN_E
-            | imprimir FIN_E            /* NO EXISTE EN EL LEXER PALABRA RESERVDA PRINT DEBEN IR EN MAYUSCULA PORQUE SON TERMINALES*/
-            | leer FIN_E                /* NO EXISTE EN EL LEXER PALABRA RESERVADA READ */
-            | RETURN expresion FIN_E
-            | BREAK FIN_E
-            ;
+    | asignacion FIN_E
+    | llamada_funcion FIN_E
+    | imprimir FIN_E
+    | leer FIN_E
+    | RETURN expr_opc FIN_E
+    | BREAK FIN_E
+    ;
+
+expr_opc ::=
+      expresion
+    | /* ε */
+    ;
+
+
+llamada_funcion ::= ID PAR_A parametros_opt PAR_C;
+
+imprimir ::= IMPRIMIR PAR_A expresion PAR_C;
+leer ::= LEER PAR_A PAR_C | LEER PAR_A PAR_C ASIGN ID;
 
 //+++++++++++++++++++++FUNCIONES++++++++++++++++++++++++++++++++
 
-funcion ::= tipo ID PAR_A parametros_opt PAR_C bloque;
+funcion ::= tipo_funcion ID PAR_A parametros_opt PAR_C bloque FIN_E;
 
-parametros_opt ::= /* vacío */
-                 | listaParametros
+parametros_opt ::= lista_parametros
+                 | // VACIO
                  ;
 
-listaParametros ::= parametro //LISTA DE PARAMETROS ES UN PARAMETRO O LISTA DE PARAMETROS SEGUIDO DE UNA COMA Y UN PARAMETRO
-                  | listaParametros COMA parametro
+lista_parametros ::= parametro //LISTA DE PARAMETROS ES UN PARAMETRO O LISTA DE PARAMETROS SEGUIDO DE UNA COMA Y UN PARAMETRO
+                  | lista_parametros COMA parametro
                   ;
 
 parametro ::= tipo ID; //UN PARAMETRO ES UN TIPO SEGUIDO DE UN ID
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-start with program;
-
-
-program ::= global_section main_function global_section
-    ;
-
-main_function ::= VOID MAIN PAR_A PAR_C BLO_A BLO_C FIN_E
-    ;
-
-global_section ::= declaracion global_section
-    | asignacion global_section
-    | // є
-    ;
-
-// ======== DECLARACIÓN DE VARIABLES ========
-tipo ::= INT1
-    | VOID
-    | STR1
-    | FLOAT1
-    | BOOL1
-    | CHAR1
-    ;
-
-declaracion ::= LET tipo ID asignacion_dec FIN_E
+declaracion ::= LET tipo ID asignacion_dec
     ;
 
 // ASIGNACION DE VARIABLES
@@ -125,7 +144,7 @@ asignacion_dec ::= ASIGN expresion
     | /* ε */
     ;
 
-asignacion ::= ID ASIGN expresion FIN_E
+asignacion ::= ID ASIGN expresion
     ;
 
 // EXPRESIONES
@@ -182,3 +201,7 @@ op_rel ::= MAYOR
     ;
 
 // ESTRUCTURAS DE CONTROL
+
+
+
+
