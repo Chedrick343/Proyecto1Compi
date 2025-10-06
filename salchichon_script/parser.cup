@@ -38,6 +38,7 @@ terminal ENTERO, DECIMALES, FLOTANTE, CHAR, ID, SPACE, ENTER, FIN_L, INPUT1, COM
 terminal MAIN, CADENA;
 
 // NO TERMINALES
+non terminal bloque, lista_sentencias, lista_sentencias_opt, sentencia;
 non terminal Object program;
 non terminal main_function, global_section;
 non terminal tipo, declaracion;
@@ -58,30 +59,26 @@ precedence right NOT;
 
 // PRODUCCIONES
 
-/*
-AQUI EMPEZAREMOS A PONER NUESTRAS PRODUCCIONES, LAS HARÉ COMENTADAS POR AHORA
-
 //+++++++++++++++++++++BLOQUE++++++++++++++++++++++++++++++++++
 
-bloque ::= BLO_A listaSentencias_opt BLO_C;
+bloque ::= BLO_A lista_sentencias_opt BLO_C;
 
-listaSentencias_opt ::= /* vacío */
-                     | listaSentencias
+lista_sentencias_opt ::= /* vacío */
+                     | lista_sentencias
                      ;
 
-listaSentencias ::= sentencia
-                  | listaSentencias sentencia
+lista_sentencias ::= sentencia
+                  | lista_sentencias sentencia
                   ;
 sentencia ::= declaracion FIN_E
             | asignacion FIN_E
-            | llamadaFuncion FIN_E
-            | imprimir FIN_E
-            | leer FIN_E
+            | llamada_funcion FIN_E
+            | imprimir FIN_E            /* NO EXISTE EN EL LEXER PALABRA RESERVDA PRINT DEBEN IR EN MAYUSCULA PORQUE SON TERMINALES*/
+            | leer FIN_E                /* NO EXISTE EN EL LEXER PALABRA RESERVADA READ */
             | RETURN expresion FIN_E
             | BREAK FIN_E
             ;
 
-tipo ::= INT1 | CHAR1 | STR1 | FLOAT1 | BOOL1;
 //+++++++++++++++++++++FUNCIONES++++++++++++++++++++++++++++++++
 
 funcion ::= tipo ID PAR_A parametros_opt PAR_C bloque;
@@ -96,8 +93,6 @@ listaParametros ::= parametro //LISTA DE PARAMETROS ES UN PARAMETRO O LISTA DE P
 
 parametro ::= tipo ID; //UN PARAMETRO ES UN TIPO SEGUIDO DE UN ID
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-*/
-
 
 start with program;
 
