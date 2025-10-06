@@ -6,3 +6,10 @@ Token: ENTERO	Lexema: 10	Tabla: tablaConstantes
 Token: CHAR1	Lexema: $	Tabla: tablaPalabrasReservadas
 Token: ID	Lexema: arreglo	Tabla: tablaIdentificadores
 Token: CHAR1	Lexema: $	Tabla: tablaPalabrasReservadas
+Token: LET	Lexema: let	Tabla: tablaPalabrasReservadas
+Token: STR1	Lexema: string	Tabla: tablaPalabrasReservadas
+Token: ASIGN	Lexema: =	Tabla: tablaPalabrasReservadas
+Token: CADENA	Lexema: "	Tabla: tablaConstantes
+Token: ID	Lexema: main	Tabla: tablaIdentificadores
+Token: BLO_A	Lexema: ¿	Tabla: tablaPalabrasReservadas
+Token: BLO_C	Lexema: ?	Tabla: tablaPalabrasReservadas

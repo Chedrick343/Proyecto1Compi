@@ -235,7 +235,7 @@ COMENTARIO = {COM_S} | {COM_C}
         [\n] {
             String tmp = cadena; 
             cadena = "";  
-            System.out.println("Se esperaba cierre de cadena (\")."); 
+            System.out.println("Se esperaba cierre de cadena en la linea yyline() (\")."); 
             yybegin(YYINITIAL);
         }
         [^\"] { cadena += yytext(); }
