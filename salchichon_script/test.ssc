@@ -17,5 +17,5 @@ int mifunc єэ ¿
 init void principal єэ ¿ ?$
 
 void funcion2 єint identificadorэ¿
-    identificador++$
+    suma = numero + identificador++$
 ?$

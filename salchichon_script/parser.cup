@@ -193,8 +193,8 @@ operando ::= ENTERO
     | llamada_funcion
     | elem_arr
     | MENOS operando
-    | INC
-    | DEC
+    | incrementar
+    | decrementar
     ;
 
 // OPERADORES RELACIONALES
