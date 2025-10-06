@@ -112,11 +112,10 @@ BREAK       =   "break"
 OUTPUT      =   "output"
 INPUT       =   "input"
 
+// funcion principal
+MAIN        =   "principal"
 
 // Regex
-DIGITO_CERO     =   [0-9]               // ESTO ES NECESARIO?
-DIGITO          =   [1-9]               // ESTO ES NECESARIO?
-
 ENTERO          =   (0)|(-?[1-9][0-9]*) 
 DECIMALES       =   [0-9]*[1-9]+
 FLOTANTE        =   (0\.0)|(-?({ENTERO}\.({DECIMALES}|0))|(0\.{DECIMALES}))
@@ -624,6 +623,14 @@ COMENTARIO = {COM_S} | {COM_C}
                             return new Symbol(sym.IGUAL, yyline, yycolumn,yytext()); }
 
 
+<YYINITIAL> {MAIN} {
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(), "funcionPrincipal");
+                            }
+                            tokenWriter.println("Token: MAIN\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            return new Symbol(sym.MAIN, yyline, yycolumn, yytext()); }
+
+
 // ID VA AL FINAL PARA RECONOCER PALABRAS RESERVADAS PRIMERO
 <YYINITIAL> {ID}        { 
     
@@ -649,7 +656,7 @@ COMENTARIO = {COM_S} | {COM_C}
 
 <CADENA> {
         [\"] { 
-            String tmp = cadena + "\""; 
+            String tmp = "\"" + cadena + "\""; 
             cadena = ""; 
             yybegin(YYINITIAL);
               
