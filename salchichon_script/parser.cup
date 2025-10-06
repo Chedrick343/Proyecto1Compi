@@ -1,6 +1,6 @@
 package salchichon_script;
 
-import java_cup.runtime.Symbol;
+import java_cup.runtime.*;
 
 parser code
 {:
