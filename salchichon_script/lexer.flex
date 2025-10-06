@@ -86,6 +86,7 @@ DIF         =   "!="
 IGUAL       =   "=="
 
 // Palabras reservadas
+INIT        =   "init"
 INT1        =   "int"
 CHAR1       =   "char"
 STR1        =   "String"
@@ -138,6 +139,15 @@ COM_C   =   "¡" ([^!]|(\n|\r))* "!"
 COMENTARIO = {COM_S} | {COM_C}
 
 %%
+<YYINITIAL> {INIT}
+                        {
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(),"PalabraReservadaInit");
+                            }
+                            tokenWriter.println("Token: INIT\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            return new Symbol(sym.INIT, yyline, yycolumn, yytext()); 
+                        }
+
 
 <YYINITIAL> {INPUT}
                         {

@@ -32,7 +32,7 @@ terminal MAYOR, MENOR, MAY_IGU, MEN_IGU, IGUAL, DIF;
 terminal INT1, CHAR1, STR1, FLOAT1, BOOL1, LET, VOID, TRUE1, FALSE1, DECIDE;
 terminal OF, ELSE, END, LOOP, EXIT, WHEN, FOR1, STEP, TO, DOWNTO, DO;
 terminal RETURN, BREAK;
-terminal OUTPUT, INPUT;
+terminal OUTPUT, INPUT, INIT;
 
 terminal ENTERO, DECIMALES, FLOTANTE, CHAR, ID, SPACE, ENTER, FIN_L, INPUT1, COM_S, COM_C, COMENTARIO;
 terminal IMPRIMIR, LEER, MAIN, CADENA;
@@ -63,7 +63,7 @@ precedence right NOT;
 start with program;
 
 
-program ::= lista_global main_funcion
+program ::= lista_global main_funcion lista_global
     ;
     
 lista_global ::= elemento_global lista_global
@@ -74,10 +74,11 @@ elemento_global ::= sentencia
     | funcion
     ;
 
-main_funcion ::= VOID MAIN PAR_A PAR_C bloque FIN_E
-    | VOID MAIN bloque FIN_E
+main_funcion ::= INIT VOID MAIN PAR_A PAR_C bloque FIN_E
+    | INIT VOID MAIN bloque FIN_E
     ;
-    
+
+
 // ======== DECLARACIÓN DE VARIABLES ========
 tipo ::= INT1
     | STR1
@@ -87,7 +88,7 @@ tipo ::= INT1
     ;
 
 tipo_funcion ::= tipo
-    //| VOID
+    | VOID
     ;
 
 //+++++++++++++++++++++BLOQUE++++++++++++++++++++++++++++++++++
