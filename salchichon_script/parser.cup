@@ -1,6 +1,6 @@
 package salchichon_script;
 
-import java_cup.runtime.*;
+import java_cup.runtime.Symbol;
 
 parser code
 {:
@@ -19,13 +19,13 @@ action code
 :}
 
 // TERMINALES
-terminal String INT1, CHAR1, STR1, FLOAT1, BOOL1;
+terminal String INT1, CHAR1, STR1, FLOAT1, BOOL1, VOID;
 terminal String LET, PAR_A, PAR_C, BLO_A, BLO_C, COMA, FIN_E, ASIGN;
 terminal String ID, ENTERO, CADENA;
 
 // NO TERMINALES - CORREGIR: program en lugar de program
 non terminal Object program;
-non terminal funcion, sentencia, main, declaracion, bloque, expresion, termino, factor;
+non terminal main, bloque, lista_sentencias, sentencia, creacion, tipo, expresion, asignacion_opt;
 
 // PRECEDENCIA
 //precedence left MAS, MENOS;
@@ -34,6 +34,32 @@ non terminal funcion, sentencia, main, declaracion, bloque, expresion, termino, 
 // PRODUCCIONES
 start with program;
 
-program ::= main;
 
-main ::= LET ID ASIGN ENTERO;
+program ::= main
+    {: System.out.println("Programa completo reconocido."); :}
+    ;
+
+main ::= VOID ID BLO_A lista_sentencias BLO_C FIN_E
+    {: System.out.println("Main reconocido correctamente."); :}
+    ;
+
+bloque ::= BLO_A lista_sentencias BLO_C
+    ;
+
+lista_sentencias ::=
+    lista_sentencias sentencia
+    |
+    sentencia
+    ;
+
+sentencia ::= creacion FIN_E
+    ;
+
+creacion ::= LET tipo ID asignacion_opt
+    ;
+
+asignacion_opt ::= ASIGN expresion | /* vacío */ ;
+
+tipo ::= INT1 | FLOAT1 | STR1 | BOOL1 | CHAR1 ;
+
+expresion ::= ID | ENTERO | CADENA ;
