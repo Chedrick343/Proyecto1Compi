@@ -274,7 +274,7 @@ COMENTARIO = {COM_S} | {COM_C}
                                 tablaPalabrasReservadas.put(yytext(),"PalabraReservadaTrue");
                             }
                             tokenWriter.println("Token: TRUE1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
-                            return new Symbol(sym.TRUE1, yyline, yycolumn,"Booleano"); 
+                            return new Symbol(sym.TRUE1, yyline, yycolumn,yytext()); 
                         }
 
 
@@ -314,7 +314,7 @@ COMENTARIO = {COM_S} | {COM_C}
                                 tablaPalabrasReservadas.put(yytext(),"PalabraReservadaFalse");
                             }
                             tokenWriter.println("Token: FALSE1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
-                            return new Symbol(sym.FALSE1, yyline, yycolumn,"Booleano"); 
+                            return new Symbol(sym.FALSE1, yyline, yycolumn,yytext()); 
                         }
 
 
@@ -323,7 +323,7 @@ COMENTARIO = {COM_S} | {COM_C}
                                 tablaPalabrasReservadas.put(yytext(), "TipoEntero");
                             }
                             tokenWriter.println("Token: INT1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
-                            return new Symbol(sym.INT1, yyline, yycolumn,"entero"); }
+                            return new Symbol(sym.INT1, yyline, yycolumn,yytext()); }
 
 
 <YYINITIAL> {CHAR1}     { 
@@ -331,7 +331,7 @@ COMENTARIO = {COM_S} | {COM_C}
                                 tablaPalabrasReservadas.put(yytext(), "TipoChar");
                             }
                             tokenWriter.println("Token: CHAR1\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
-                            return new Symbol(sym.CHAR1, yyline, yycolumn,"caracter"); }
+                            return new Symbol(sym.CHAR1, yyline, yycolumn,yytext()); }
 
 
 <YYINITIAL> {STR1}      { 
