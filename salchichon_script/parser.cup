@@ -47,7 +47,7 @@ non terminal asignacion, asignacion_dec;
 non terminal expresion;
 non terminal expresion_arit, termino, factor, potencia, operando, elem_arr;
 non terminal op_rel, incrementar, decrementar;
-non terminal condicional, lista_casos, caso, cond_else_opt, bucleloop;
+non terminal condicional, lista_casos, caso, cond_else_opt, bucle_loop, bucle_for, step, direccion;
 
 // PRECEDENCIA
 precedence left OR;
@@ -113,7 +113,8 @@ sentencia ::= declaracion FIN_E
     | incrementar FIN_E
     | decrementar FIN_E
     | condicional FIN_E
-    | bucleloop 
+    | bucle_loop 
+    | bucle_for
     ;
 
 incrementar ::= ID INC;
@@ -223,7 +224,18 @@ cond_else_opt ::= /* vacío */
                  | ELSE FLECHA bloque
                  ;
 
-bucleloop ::= LOOP lista_sentencias EXIT WHEN expresion FIN_E END LOOP FIN_E;
+bucle_loop ::= LOOP lista_sentencias EXIT WHEN expresion FIN_E END LOOP FIN_E;
+
+bucle_for ::= FOR1 PAR_A asignacion PAR_C step direccion expresion DO bloque END FOR1 FIN_E;
+
+
+step ::= /* vacío */ 
+       | STEP
+       ;
+
+direccion ::= TO
+            | DOWNTO
+            ;
 
 
 

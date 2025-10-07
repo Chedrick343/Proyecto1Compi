@@ -28,4 +28,9 @@ void funcion2 єint identificadorэ¿
         x++$
     exit when x>10$
     end loop$
+
+    for єy = 1э step to 10 do ¿
+        unaVariable = 4$
+    ?
+    end for$
 ?$
