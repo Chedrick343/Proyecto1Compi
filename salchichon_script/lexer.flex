@@ -666,8 +666,6 @@ COMENTARIO = {COM_S} | {COM_C}
                                 tablaIdentificadores.put(yytext(), "identificador");
                                 tokenWriter.println("Token: ID\tLexema: " + yytext() + "\tTabla: tablaIdentificadores");
                                 return new Symbol(sym.ID, yyline, yycolumn,yytext());
-                            }else{
-                                System.out.println("El identificador: "+yytext()+" en la linea "+yyline+" ya existe en el programa");
                             }
                             return new Symbol(sym.ID, yyline, yycolumn, yytext());
                             }
