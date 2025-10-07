@@ -22,4 +22,10 @@ void funcion2 єint identificadorэ¿
         suma2 = 4$
     ?
     end decide$
+
+    loop
+        let int x = 6$
+        x++$
+    exit when x>10$
+    end loop$
 ?$
