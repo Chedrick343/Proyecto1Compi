@@ -5,15 +5,43 @@ import java_cup.runtime.Symbol;
 // PARSER
 parser code
 {:
+    public boolean tieneErrores = false;
+
+    // Para recordar última posición válida
+    private int lastLine = 1;
+    private int lastColumn = 1;
+
+    // Guardar última posición válida después de cada token leído
+    @Override
+    public Symbol scan() throws Exception {
+        Symbol sym = super.scan();
+        if (sym != null) {
+            if (sym.left >= 0) lastLine = sym.left + 1;
+            if (sym.right >= 0) lastColumn = sym.right + 1;
+        }
+        return sym;
+    }
 
     // Errores recuperables
-    public void syntax_error(Symbol s){
-        System.out.println("Error R de sintaxis: "+ s.value +" Línea "+(s.left+1)+" Columna "+(s.right+1) );
+    @Override
+    public void syntax_error(Symbol s) {
+        tieneErrores = true; 
+        String lexema = (s != null && s.value != null) ? s.value.toString() : "EOF o símbolo desconocido";
+        int linea = (s != null && s.left >= 0) ? s.left + 1 : lastLine;
+        int columna = (s != null && s.right >= 0) ? s.right + 1 : lastColumn;
+
+        System.err.printf("\u001B[31m XXX Error sintáctico recuperable XXX :       Token '%s' en línea %d, columna %d.\u001B[0m %n", lexema, linea, columna);
     }
 
     // Errores no recuperables
-    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception { 
-        System.out.println("Error NR de sintaxis: " + s.value + " Línea " + (s.left+1) + " Columna " + (s.right+1));
+    @Override
+    public void unrecovered_syntax_error(Symbol s) throws Exception {
+        tieneErrores = true; 
+        String lexema = (s != null && s.value != null) ? s.value.toString() : "EOF o símbolo desconocido";
+        int linea = (s != null && s.left >= 0) ? s.left + 1 : lastLine;
+        int columna = (s != null && s.right >= 0) ? s.right + 1 : lastColumn;
+
+        System.err.printf("\u001B[31m     XXX Error sintáctico crítico XXX :       Token '%s' en línea %d, columna %d. \u001B[0m %n", lexema, linea, columna);
     }
 :}
 
@@ -32,9 +60,9 @@ terminal MAYOR, MENOR, MAY_IGU, MEN_IGU, IGUAL, DIF;
 terminal INT1, CHAR1, STR1, FLOAT1, BOOL1, LET, VOID, TRUE1, FALSE1, DECIDE;
 terminal OF, ELSE, END, LOOP, EXIT, WHEN, FOR1, STEP, TO, DOWNTO, DO;
 terminal RETURN, BREAK;
-terminal OUTPUT, INPUT, INIT;
+terminal INIT;
 
-terminal ENTERO, DECIMALES, FLOTANTE, CHAR, ID, SPACE, ENTER, FIN_L, INPUT1, COM_S, COM_C, COMENTARIO;
+terminal ENTERO, FLOTANTE, CHAR, ID;
 terminal IMPRIMIR, LEER, MAIN, CADENA;
 
 // NO TERMINALES
@@ -77,6 +105,7 @@ elemento_global ::= sentencia
 
 main_funcion ::= INIT VOID MAIN PAR_A PAR_C bloque FIN_E
     | INIT VOID MAIN bloque FIN_E
+    | INIT VOID MAIN error FIN_E
     ;
 
 
@@ -94,7 +123,9 @@ tipo_funcion ::= tipo
 
 //+++++++++++++++++++++BLOQUE++++++++++++++++++++++++++++++++++
 
-bloque ::= BLO_A lista_sentencias_opt BLO_C;
+bloque ::= BLO_A lista_sentencias_opt BLO_C
+         | BLO_A error BLO_C
+         ;
 
 lista_sentencias_opt ::= /* vacío */
                      | lista_sentencias
@@ -115,6 +146,7 @@ sentencia ::= declaracion FIN_E //AQUI DECLARAMOS QUE LAS SENTENCIAS SON TODOS A
     | condicional FIN_E
     | bucle_loop 
     | bucle_for
+    | error FIN_E
     ;
 
 incrementar ::= ID INC;
@@ -133,7 +165,9 @@ leer ::= LEER PAR_A PAR_C | LEER PAR_A PAR_C ASIGN ID;
 
 //+++++++++++++++++++++FUNCIONES++++++++++++++++++++++++++++++++
 
-funcion ::= tipo_funcion ID PAR_A parametros_opt PAR_C bloque FIN_E;
+funcion ::= tipo_funcion ID PAR_A parametros_opt PAR_C bloque FIN_E
+          | tipo_funcion ID PAR_A parametros_opt PAR_C error FIN_E
+          ;
 
 parametros_opt ::= lista_parametros
                  | // VACIO

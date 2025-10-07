@@ -110,8 +110,6 @@ DOWNTO      =   "downto"
 DO          =   "do"
 RETURN      =   "return"
 BREAK       =   "break"
-OUTPUT      =   "output"
-INPUT       =   "input"
 IMPRIMIR    =   "print"
 LEER        =   "read"
 
@@ -121,7 +119,7 @@ MAIN        =   "principal"
 // Regex
 ENTERO          =   (0)|(-?[1-9][0-9]*) 
 DECIMALES       =   [0-9]*[1-9]+
-FLOTANTE        =   (0\.0)|(-?({ENTERO}\.({DECIMALES}|0))|(0\.{DECIMALES}))
+FLOTANTE        =   (0\.0)|(-?(([1-9][0-9]*)\.({DECIMALES}|0))|(0\.{DECIMALES}))
 CHAR            =   \' [^'\n] \'
 ID              =   [_a-zA-ZñÑ][_0-9a-zA-ZñÑ]*
 
@@ -146,26 +144,6 @@ COMENTARIO = {COM_S} | {COM_C}
                             }
                             tokenWriter.println("Token: INIT\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
                             return new Symbol(sym.INIT, yyline, yycolumn, yytext()); 
-                        }
-
-
-<YYINITIAL> {INPUT}
-                        {
-                            if(!tablaPalabrasReservadas.containsKey(yytext())){
-                                tablaPalabrasReservadas.put(yytext(),"PalabraReservadaInput");
-                            }
-                            tokenWriter.println("Token: INPUT\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
-                            return new Symbol(sym.INPUT, yyline, yycolumn, yytext()); 
-                        }
-
-
-<YYINITIAL> {OUTPUT}
-                        {
-                            if(!tablaPalabrasReservadas.containsKey(yytext())){
-                                tablaPalabrasReservadas.put(yytext(),"PalabraReservadaOutput");
-                            }
-                            tokenWriter.println("Token: OUTPUT\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
-                            return new Symbol(sym.OUTPUT, yyline, yycolumn, yytext()); 
                         }
 
 
@@ -465,14 +443,6 @@ COMENTARIO = {COM_S} | {COM_C}
                             return new Symbol(sym.CHAR, yyline, yycolumn,yytext()); }
 
 
-<YYINITIAL> {DECIMALES} { 
-                            if(!tablaConstantes.containsKey(yytext())){
-                                tablaConstantes.put(yytext(), "constante");
-                            }
-                            tokenWriter.println("Token: DECIMALES\tLexema: " + yytext() + "\tTabla: tablaConstantes");
-                            return new Symbol(sym.DECIMALES, yyline, yycolumn,yytext()); }
-
-
 <YYINITIAL> {FLOTANTE}  { 
                             if(!tablaConstantes.containsKey(yytext())){
                                 tablaConstantes.put(yytext(), "constante");
@@ -676,7 +646,7 @@ COMENTARIO = {COM_S} | {COM_C}
 <YYINITIAL> {COMENTARIO} { /* ignorar */ }
 
 <YYINITIAL> . {
-        String errLex = "Error léxico : '"+yytext()+"' en la línea: "+(yyline+1)+" y columna: "+(yycolumn+1);
+        String errLex = "\u001B[31m Error léxico : '"+yytext()+"' en la línea: "+(yyline+1)+" y columna: "+(yycolumn+1) + "\u001B[0m ";
         System.out.println(errLex);
 }
 
