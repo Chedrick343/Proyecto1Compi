@@ -47,7 +47,11 @@ public class Main {
             parser.parse(); 
             lexer.closeWriter();
 
-            System.out.println("Análisis sintáctico completado sin errores.");
+            if (parser.tieneErrores) {
+                System.out.println("\u001B[33m Análisis sintáctico completado con errores.\u001B[0m");
+            } else {
+                System.out.println("Análisis sintáctico completado sin errores.");
+            }
         } catch (Exception e) {
             System.err.println("Error durante el análisis sintáctico:");
             e.printStackTrace();
