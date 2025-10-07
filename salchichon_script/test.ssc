@@ -14,7 +14,7 @@ let String y = "hola" $
 let boolean prueba$
 let float yolo = 0.0001$
 
-_x1 = 30
+_x1 = 30$
 
 printє"hola"э$
 x2єэ$
