@@ -52,7 +52,7 @@ action code
 :}
 
 // TERMINALES
-terminal PAR_A, PAR_C, BLO_A, BLO_C, COMA, FLECHA, FIN_E, ASIGN;
+terminal PAR_A, PAR_C, BLO_A, BLO_C, COMA, FLECHA, FIN_E, ASIGN, COR_A, COR_C, COMILLA_SIMP, CADENA_CHAR;
 terminal MAS, MENOS, POR, DIV, DIV_ENT, MOD, POT;
 terminal AND, OR, NOT;
 terminal INC, DEC;
@@ -76,6 +76,7 @@ non terminal expresion;
 non terminal expresion_arit, termino, factor, potencia, operando, elem_arr;
 non terminal op_rel, incrementar, decrementar;
 non terminal condicional, lista_casos, caso, cond_else_opt, bucle_loop, bucle_for, step, direccion;
+non terminal lista_elementos_arreglo_entero, lista_char; 
 
 // PRECEDENCIA
 precedence left OR;
@@ -89,22 +90,22 @@ precedence right NOT;
 
 // PRODUCCIONES
 
-start with program;
+start with program; //EMPEZAMOS CON LA PRODUCCIÓN PROGRAM
 
 
-program ::= lista_global main_funcion lista_global
-    ;
+program ::= lista_global main_funcion lista_global //PROGRAM ESTÁ CONSTITUIDO DE UNALISTA GLOBAL, DE FUNCION MAIN Y DE LISTA GLOBAL
+    ;                                              //ESTO NOS PERMITE COLOCAR EL MAIN EN CUALQUIER PARTE DEL CODIGO
     
-lista_global ::= elemento_global lista_global
+lista_global ::= elemento_global lista_global //UNA LISTA GLOBAL PUEDE SER UN ELEMENTO GLOBAL SEGUIDO DE UNA LISTA GLOBAL O PUEDE SER NADA
     | /* vacío */
     ;
 
-elemento_global ::= sentencia
+elemento_global ::= sentencia //UN ELEMENTO GLOBAL PUEDE SER UNA SENTENCIA O UNA FUNCION
     | funcion
     ;
 
-main_funcion ::= INIT VOID MAIN PAR_A PAR_C bloque FIN_E
-    | INIT VOID MAIN bloque FIN_E
+main_funcion ::= INIT VOID MAIN PAR_A PAR_C bloque FIN_E //LA FUNCION MAIN ESTA COMPUESTA POR LA PALABRA RESERVADA INIT SEGUIDO DE VOID SEGUIDO DE LA PALABRA RESERVADA MAIN, PARENTESIS Y FINALMENTE BLOQUE
+    | INIT VOID MAIN bloque FIN_E                        //TAMBIEN PUEDE SER SIN PARENTESIS LA FUNCION MAIN
     | INIT VOID MAIN error FIN_E
     ;
 
@@ -184,9 +185,15 @@ declaracion ::= LET tipo ID asignacion_dec
     ;
 
 // ASIGNACION DE VARIABLES
-asignacion_dec ::= ASIGN expresion 
+asignacion_dec ::= ASIGN expresion //SE PUEDE HACER LA ASIGNACION DE UNA EXPRESION O TAMBIEN
+    | COR_A ENTERO COR_C ASIGN COR_A lista_elementos_arreglo_entero COR_C //PODEMOS DECLARAR UN ARREGLO CON ASIGNACION
+    | COR_A ENTERO COR_C ASIGN CADENA_CHAR
     | /* ε */
     ;
+
+lista_char ::=    CHAR
+                | CHAR lista_char
+                ;
 
 asignacion ::= ID ASIGN expresion// UNA ASIGNACION SENCILLA
     ;
@@ -271,7 +278,12 @@ direccion ::= TO //DIRECCIÓN EN LA QUE VA A CORRER EL CONTADOR
             | DOWNTO
             ;
 
+//++++++++++++++++++++++++++++++++ARREGLOS+++++++++++++++++++++++++++++
 
+
+lista_elementos_arreglo_entero ::=    ENTERO
+                                    | ENTERO COMA lista_elementos_arreglo_entero
+                                    ;
 
 
 

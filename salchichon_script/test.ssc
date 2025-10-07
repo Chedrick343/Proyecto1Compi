@@ -42,4 +42,7 @@ void funcion2 єint identificadorэ¿
         unaVariable = 4$
     ?
     end for$
+    let int arreglo[5] = [2]$
+
+    let char arregloChar[5] = 'esto es un arreglo'$
 ?$

@@ -59,6 +59,9 @@ COMA        =   ","
 FLECHA      =   "->"
 FIN_E       =   "$"
 ASIGN       =   "="
+COR_A       =   "["
+COR_C       =   "]"
+COMILLA_SIMP =  \'
 
 // Operadores
 MAS         =   "\+"
@@ -117,10 +120,11 @@ LEER        =   "read"
 MAIN        =   "principal"
 
 // Regex
-ENTERO          =   (0)|(-?[1-9][0-9]*) 
+ENTERO          =   (0)|(-?[1-9][0-9]*)
 DECIMALES       =   [0-9]*[1-9]+
 FLOTANTE        =   (0\.0)|(-?(([1-9][0-9]*)\.({DECIMALES}|0))|(0\.{DECIMALES}))
 CHAR            =   \' [^'\n] \'
+CADENA_CHAR     =   \' [^'\n]* \'
 ID              =   [_a-zA-ZñÑ][_0-9a-zA-ZñÑ]*
 
 SPACE           =   [ \t\f\r]
@@ -137,6 +141,46 @@ COM_C   =   "¡" ([^!]|(\n|\r))* "!"
 COMENTARIO = {COM_S} | {COM_C}
 
 %%
+<YYINITIAL> {CADENA_CHAR}
+                        {
+                            if(!tablaConstantes.containsKey(yytext())){
+                                tablaConstantes.put(yytext(),"cadenaChars");
+                            }
+                            tokenWriter.println("Token: CADENA_CHAR\tLexema: " + yytext() + "\tTabla: tablaConstantes");
+                            return new Symbol(sym.CADENA_CHAR, yyline, yycolumn, yytext()); 
+                        }
+
+
+<YYINITIAL> {COMILLA_SIMP}
+                        {
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(),"comillaSimple");
+                            }
+                            tokenWriter.println("Token: COMILLA_SIMP\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            return new Symbol(sym.COMILLA_SIMP, yyline, yycolumn, yytext()); 
+                        }
+
+
+<YYINITIAL> {COR_C}
+                        {
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(),"cierraCorchete");
+                            }
+                            tokenWriter.println("Token: COR_C\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            return new Symbol(sym.COR_C, yyline, yycolumn, yytext()); 
+                        }
+
+
+<YYINITIAL> {COR_A}
+                        {
+                            if(!tablaPalabrasReservadas.containsKey(yytext())){
+                                tablaPalabrasReservadas.put(yytext(),"abreCorchete");
+                            }
+                            tokenWriter.println("Token: COR_A\tLexema: " + yytext() + "\tTabla: tablaPalabrasReservadas");
+                            return new Symbol(sym.COR_A, yyline, yycolumn, yytext()); 
+                        }
+
+
 <YYINITIAL> {INIT}
                         {
                             if(!tablaPalabrasReservadas.containsKey(yytext())){
