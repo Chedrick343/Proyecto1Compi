@@ -103,7 +103,7 @@ lista_sentencias_opt ::= /* vacío */
 lista_sentencias ::= sentencia
                   | lista_sentencias sentencia
                   ;
-sentencia ::= declaracion FIN_E
+sentencia ::= declaracion FIN_E //AQUI DECLARAMOS QUE LAS SENTENCIAS SON TODOS AQUELLOS ELEMENTOS QUE SE PUEDEN UTILIZAR PARA GENERAR ALGUNA ESTRUCTURA CON SENTIDO
     | asignacion FIN_E
     | llamada_funcion FIN_E
     | imprimir FIN_E
@@ -150,15 +150,15 @@ declaracion ::= LET tipo ID asignacion_dec
     ;
 
 // ASIGNACION DE VARIABLES
-asignacion_dec ::= ASIGN expresion
+asignacion_dec ::= ASIGN expresion 
     | /* ε */
     ;
 
-asignacion ::= ID ASIGN expresion
+asignacion ::= ID ASIGN expresion// UNA ASIGNACION SENCILLA
     ;
 
 // EXPRESIONES
-expresion ::= expresion AND expresion
+expresion ::= expresion AND expresion //AQUI CONTEMPLAMOS LAS OPERACIONES LOGICAS
     | expresion OR expresion
     | NOT expresion
     | expresion_arit op_rel expresion_arit
@@ -167,26 +167,26 @@ expresion ::= expresion AND expresion
 
 
 // EXPRESIONES ARITMETICAS
-expresion_arit ::= expresion_arit MAS termino
-    | expresion_arit MENOS termino
+expresion_arit ::= expresion_arit MAS termino //UNA EXPRESIÓN ARITMETICA ES LA SUMA DE UNA EXPRESION ARITMETICA Y UN TERMINO O LA RESTA DE ESTOS O PUEDE SER UN PRODUCTO
+    | expresion_arit MENOS termino //SE HACE DE ESTA FORMA PARA PODER MANTENER EL ORDE DE LAS OPERACIONES
     | termino
     ;
 
-termino ::= factor POR factor
+termino ::= factor POR factor //UN TERMINO PUEDE SER UN FACTOR POR UN FACTOR O DIVICION ENTERA O MODULO, DE ESTA FORMA RESOLVEMOS PRIMERO LAS DE MÁS IMPORTANCIA
     | factor DIV factor
     | factor DIV_ENT factor
     | factor MOD factor
     | factor
     ;
 
-factor ::= potencia POT potencia
+factor ::= potencia POT potencia //AQUI USAMOS RECURSIVIDAD Y DECIMOS QUE UN FACTOR PUEDE SER UNA POTENCIA Y A SU VEZ UNA POTENCIA PUEDE SER UN OPERANDO O PUEDE SER UNA POTENCIA A LA POTENCIA QUE TERMINA SIENDO UN OPERANDO
     | potencia
     ;
 
-potencia ::= PAR_A expresion PAR_C
+potencia ::= PAR_A expresion PAR_C //UNA POTENCIA PUEDE SER UNA EXPRESION DENTRO DE PARENTESIS O UN OPERANDO
     | operando
     ;
-
+//UN OPERANDO ES LA FORMA MÁS SENCILLA DE UNA OPERACIÓN
 operando ::= ENTERO
     | FLOTANTE
     | TRUE1
@@ -212,28 +212,28 @@ op_rel ::= MAYOR
 
 // ESTRUCTURAS DE CONTROL
 
-condicional ::= DECIDE OF lista_casos cond_else_opt END DECIDE;
+condicional ::= DECIDE OF lista_casos cond_else_opt END DECIDE; //PRODUCCION DE CONDICIONAL DONDE RECIBE UNA LISTA DE CASOS UN ELSE CONDICIONAL Y EL END DECIDE
 
 lista_casos ::= caso
-              | caso lista_casos
+              | caso lista_casos // SE PUEDE UN SOLO CASO O UNA LISTA DE CASOS
               ;
 
-caso ::= PAR_A expresion PAR_C FLECHA bloque;
+caso ::= PAR_A expresion PAR_C FLECHA bloque; //LOS CASOS QUE PUEDEN ESTAR EN LA CONDICIONAL
 
 cond_else_opt ::= /* vacío */
-                 | ELSE FLECHA bloque
+                 | ELSE FLECHA bloque // PODEMOS PONER ELSE O PODEMOS DEJARLO VACIO
                  ;
 
-bucle_loop ::= LOOP lista_sentencias EXIT WHEN expresion FIN_E END LOOP FIN_E;
+bucle_loop ::= LOOP lista_sentencias EXIT WHEN expresion FIN_E END LOOP FIN_E; //EL BUCLE LOOP ESTÁ HECHO DE LA PALABRA RESERVADA LOOP SEGUIDO DE LA LISTA DE SENTENCIAS, EXIT WHEN, LA EXPRESION FINAL, Y EXIT LOOP SEGUIDO DEL FINAL DE EXPRESION
 
-bucle_for ::= FOR1 PAR_A asignacion PAR_C step direccion expresion DO bloque END FOR1 FIN_E;
+bucle_for ::= FOR1 PAR_A asignacion PAR_C step direccion expresion DO bloque END FOR1 FIN_E; //UN BUCLE FOR ESTA HECHO DE PALABRA RESERVADA FOR, PARENTESIS, LA ASIGNACION, PARENTESIS, STEP, LA DIRECCION DEL CONTADOR, A EXPRESION Y LA EL BLOQUE
 
 
 step ::= /* vacío */ 
-       | STEP
+       | STEP //PALABRA RESERVADA STEP QUE SE NOS SOLICITA AGREGAR EN LA GRAMATICA
        ;
 
-direccion ::= TO
+direccion ::= TO //DIRECCIÓN EN LA QUE VA A CORRER EL CONTADOR
             | DOWNTO
             ;
 
