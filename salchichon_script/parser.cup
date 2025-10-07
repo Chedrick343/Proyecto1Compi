@@ -61,22 +61,22 @@ precedence right NOT;
 
 // PRODUCCIONES
 
-start with program;
+start with program; //EMPEZAMOS CON LA PRODUCCIÓN PROGRAM
 
 
-program ::= lista_global main_funcion lista_global
-    ;
+program ::= lista_global main_funcion lista_global //PROGRAM ESTÁ CONSTITUIDO DE UNALISTA GLOBAL, DE FUNCION MAIN Y DE LISTA GLOBAL
+    ;                                              //ESTO NOS PERMITE COLOCAR EL MAIN EN CUALQUIER PARTE DEL CODIGO
     
-lista_global ::= elemento_global lista_global
+lista_global ::= elemento_global lista_global //UNA LISTA GLOBAL PUEDE SER UN ELEMENTO GLOBAL SEGUIDO DE UNA LISTA GLOBAL O PUEDE SER NADA
     | /* vacío */
     ;
 
-elemento_global ::= sentencia
+elemento_global ::= sentencia //UN ELEMENTO GLOBAL PUEDE SER UNA SENTENCIA O UNA FUNCION
     | funcion
     ;
 
-main_funcion ::= INIT VOID MAIN PAR_A PAR_C bloque FIN_E
-    | INIT VOID MAIN bloque FIN_E
+main_funcion ::= INIT VOID MAIN PAR_A PAR_C bloque FIN_E //LA FUNCION MAIN ESTA COMPUESTA POR LA PALABRA RESERVADA INIT SEGUIDO DE VOID SEGUIDO DE LA PALABRA RESERVADA MAIN, PARENTESIS Y FINALMENTE BLOQUE
+    | INIT VOID MAIN bloque FIN_E                        //TAMBIEN PUEDE SER SIN PARENTESIS LA FUNCION MAIN
     ;
 
 
